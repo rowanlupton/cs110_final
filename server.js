@@ -7,7 +7,7 @@ require('./models/article');
 
 var articleController = require('./controllers/article');
 
-mongoose.connect('mongodb://localhost/cs110final');
+mongoose.connect(process.env.MONGOLAB_URI ||  'mongodb://localhost/cs110final');
 
 app.use(express.json());
 app.use(express.urlencoded()); //turns URL data into a usable piece object
