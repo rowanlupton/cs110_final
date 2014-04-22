@@ -1,13 +1,13 @@
 var express = require('express'),
 		app = express(),
-		port = process.env.PORT || 8080,
+		port = process.env.PORT || 8080, //uses heroku's provided port if it exists; otherwise, 8080
 		mongoose = require('mongoose');
 
 require('./models/article');
 
 var articleController = require('./controllers/article');
 
-mongoose.connect(process.env.MONGOLAB_URI ||  'mongodb://localhost/cs110final');
+mongoose.connect(process.env.MONGOLAB_URI ||  'mongodb://localhost/cs110final'); //uses the mongolabs database if it exists; otherwise, a localhost path
 
 app.use(express.json());
 app.use(express.urlencoded()); //turns URL data into a usable piece object
