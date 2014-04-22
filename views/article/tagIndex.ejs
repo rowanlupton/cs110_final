@@ -1,0 +1,11 @@
+<%include top%>
+	<div id="articleList">
+		<ul>
+			<% articles.forEach(function(article) { %>
+				<li>
+					<a href="/articles/<%=article.id%>"><%=article.title%></a>
+				</li>
+			<% }); %>
+		</ul>
+	</div><!--articleList-->
+<%include bottom%>

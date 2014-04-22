@@ -1,0 +1,20 @@
+<%include top%>
+	<a href="/articles" id="indexLink">back to index</a>
+	<h1><%=article.title%></h1>
+	<div id="articleBody">
+		<p><%-article.body%></p>
+		<% if (article.tags != '') {
+			for (var i=0;i<article.tags.length;i++) { %>
+			<% console.log(i) %>
+			<a href="/articles/tags/<%=article.tags[i]%>" class="tag"><%=article.tags[i]%></a>
+		<% }
+		}; %>
+	</div>
+	<form method="get" action="/articles/<%=article.id%>/edit">
+		<button type="submit" id="editButton" class="btn btn-default">edit post</button>
+	</form>
+	<form method="post" action="/articles/<%=article.id%>">
+		<input type="hidden" name="_method" value="delete" /> <!--method override-->
+		<button type="submit" id="deleteButton" class="btn-xs btn-default">delete this article</button>
+	</form>
+<%include bottom%>

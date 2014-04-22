@@ -1,0 +1,90 @@
+html {
+	font-family: sans-serif;
+}
+
+.navbar {
+	position:relative;
+}
+
+form {
+	position:relative;
+}
+
+.pageBody {
+	top:0;
+	max-width: 900px;
+	height: 100vh;
+	position: relative;
+	margin-left:auto;
+	margin-right:auto;
+	padding:0.5em;
+}
+
+.meta {
+	padding-left:2em;
+}
+
+
+/******************
+* form formatting *
+******************/
+
+form .input {
+	padding:0.5em;
+}
+
+form > .title {
+	position: relative;
+	width: 100%;
+	margin-bottom:1em;
+}
+
+form > .body {
+	position:relative;
+	width: 100%;
+	height: 300px;
+	margin-bottom:1em;
+}
+
+form > .submit {
+	position:relative;
+}
+
+/******************
+* view formatting *
+******************/
+
+img.floatRight {
+	float:right;
+}
+
+id="editButton" {
+	//position:absolute;
+}
+
+#indexLink {
+
+}
+
+#deleteButton {
+	position: absolute;
+	right:0;
+	bottom:0;
+}
+
+#articleBody {
+	margin-bottom: 1em;
+}
+
+.tag {
+	position: relative;
+	border: 1px solid #428bca;
+	padding:2px;
+	border-radius:4px;
+}
+
+.tag:hover {
+	text-decoration: none;
+	background-color: #428bca;
+	color: #fff;
+}

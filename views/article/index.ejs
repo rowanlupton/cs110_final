@@ -1,0 +1,28 @@
+<%include top%>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div id="articleList" class="col-md-8">
+				<ul>
+					<% articles.forEach(function(article) { %>
+						<li>
+							<a href="/articles/<%=article.id%>"><%=article.title%></a>
+						</li>
+					<% }); %>
+				</ul>
+			</div><!--articleList-->
+			<div id="tagsList" class="col-md-4">
+				<ul>
+
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="meta">
+		<div id="newPostLink">
+			<a href="/articles/new" class="btn btn-default">new post</a>
+		</div><!--newPostLink-->
+	</div><!--meta-->
+<%include bottom%>
