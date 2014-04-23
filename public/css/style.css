@@ -79,7 +79,10 @@ id="editButton" {
 .tag {
 	position: relative;
 	border: 1px solid #428bca;
-	padding:2px;
+	padding-left:0.5em;
+	padding-right:0.5em;
+	padding-top:0.1em;
+	padding-bottom:0.1em;
 	border-radius:4px;
 }
 
