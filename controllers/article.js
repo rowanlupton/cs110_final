@@ -112,45 +112,43 @@ controller.create = [
 		console.log("I made it to the function where I actually create and save things");
 		var article = new Article(req.body);
 		//loop through req.tags
-		function(req,res,next) {
-			console.log("I made it to the anonymous function");
-			var toCreate = []; //array of tags, that should be created in the callback function
-			
-			//prep for creating tags
-			for(var i = 0; i<article.tags.length;i++) {
-				console.log("I'm in the for loop");
-				toCreate.push(function(callback) { //push functions into toCreate
-																					//each function will create one new tag when it's called
-					//called Tag.create. passes it the current tag as name, makes a callback with
-					//an error and the current tag
-					Tag.create({name:req.tags[i]},function(err,tag) {
-						//err etc
-						if(err) return callback(err);
-						//calls async's function callback, passing no error and the tag id
-						callback(null,tag.id);
-					});
-				});
-			}
-
-			//runs all functions in toCreate, and when it finishes, runs the callback
-			async.parallel(toCreate,function(err,tagIds) {
-				console.log("I did the async thing");
-				console.log("tagIds: "+tagIds);
-				tagIds.forEach(function(tagId) {
-					console.log("in the tagIds forEach");
-					article.tags.push(tagId);
-					console.log(article.tags);
-				});
-				article.save(function(err,article) {
-					console.log("article: "+article);
-					console.log("article.tags: "+article.tags);
-					res.redirect('/articles')
+		var toCreate = []; //array of tags, that should be created in the callback function
+		
+		//prep for creating tags
+		for(var i = 0; i<article.tags.length;i++) {
+			console.log("I'm in the for loop");
+			toCreate.push(function(callback) { //push functions into toCreate
+																				//each function will create one new tag when it's called
+				//called Tag.create. passes it the current tag as name, makes a callback with
+				//an error and the current tag
+				Tag.create({name:req.tags[i]},function(err,tag) {
+					//err etc
+					if(err) return callback(err);
+					//calls async's function callback, passing no error and the tag id
+					callback(null,tag.id);
 				});
 			});
-			//results will be an array of object ids
-			//put the tagIds in the article
-			//save the article article.save(function(err, article) {res.redirect(/articles)});
-		};
+		}
+
+		//runs all functions in toCreate, and when it finishes, runs the callback
+		async.parallel(toCreate,function(err,tagIds) {
+			console.log("I did the async thing");
+			if(err) return callback(err);
+			console.log("tagIds: "+tagIds);
+			tagIds.forEach(function(tagId) {
+				console.log("in the tagIds forEach");
+				article.tags.push(tagId);
+				console.log(article.tags);
+			});
+			article.save(function(err,article) {
+				console.log("article: "+article);
+				console.log("article.tags: "+article.tags);
+				res.redirect('/articles')
+			});
+		});
+		//results will be an array of object ids
+		//put the tagIds in the article
+		//save the article article.save(function(err, article) {res.redirect(/articles)});
 	}	
 ];
 
