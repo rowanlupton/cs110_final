@@ -1,5 +1,8 @@
 var mongoose = require('mongoose'),
+		_ = require('lodash'),
+		async = require('async'),
 		Article = mongoose.model('article'), //articles look like what I made in the models/article.js file
+		Tag = mongoose.model('tag'),
 		controller = {};
 
 /*
@@ -40,7 +43,7 @@ controller.index = [
 
 //viewTag
 //views a list of articles for a given tag
-controller.viewTag = [
+/*controller.viewTag = [
 	function(req,res,next) {
 		console.log("CALLED viewTag");
 		next();
@@ -54,7 +57,7 @@ controller.viewTag = [
 			res.render('article/tagIndex',{articles:articles});
 		});
 	}
-];
+];*/
 
 
 //view
@@ -98,16 +101,56 @@ controller.create = [
 		}
 	},
 	function(req,res,next) {
-		console.log("splitting tags");
-		req.body.tags = req.body.tags.split(",");
-		console.log("tags are split (I think)");
+		console.log("I made it to the splitting tags function");
+		req.tags = _.uniq(req.body.tags.split(',').map(function(tag) {
+			return tag.toLowerCase();
+		}));
+		//delete req.body.tags;
 		next();
 	},
-	function(req,res,next) { //create the article in the database
-		Article.create(req.body,function(err) { //create the article
-			if(err) throw err;
-			res.redirect("/articles"); //redirect to the index page
-		});
+	function(req,res,next) { //create the article and tags in the database, assign tags to article
+		console.log("I made it to the function where I actually create and save things");
+		var article = new Article(req.body);
+		//loop through req.tags
+		function(req,res,next) {
+			console.log("I made it to the anonymous function");
+			var toCreate = []; //array of tags, that should be created in the callback function
+			
+			//prep for creating tags
+			for(var i = 0; i<article.tags.length;i++) {
+				console.log("I'm in the for loop");
+				toCreate.push(function(callback) { //push functions into toCreate
+																					//each function will create one new tag when it's called
+					//called Tag.create. passes it the current tag as name, makes a callback with
+					//an error and the current tag
+					Tag.create({name:req.tags[i]},function(err,tag) {
+						//err etc
+						if(err) return callback(err);
+						//calls async's function callback, passing no error and the tag id
+						callback(null,tag.id);
+					});
+				});
+			}
+
+			//runs all functions in toCreate, and when it finishes, runs the callback
+			async.parallel(toCreate,function(err,tagIds) {
+				console.log("I did the async thing");
+				console.log("tagIds: "+tagIds);
+				tagIds.forEach(function(tagId) {
+					console.log("in the tagIds forEach");
+					article.tags.push(tagId);
+					console.log(article.tags);
+				});
+				article.save(function(err,article) {
+					console.log("article: "+article);
+					console.log("article.tags: "+article.tags);
+					res.redirect('/articles')
+				});
+			});
+			//results will be an array of object ids
+			//put the tagIds in the article
+			//save the article article.save(function(err, article) {res.redirect(/articles)});
+		};
 	}	
 ];
 

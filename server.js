@@ -4,6 +4,7 @@ var express = require('express'),
 		mongoose = require('mongoose');
 
 require('./models/article');
+require('./models/tag');
 
 var articleController = require('./controllers/article');
 
@@ -18,7 +19,7 @@ app.use(express.static(__dirname, '/public'));//allows us to use static files fr
 
 //calls functions in the article.js controller file, to do the CRUD things
 app.get('/articles',articleController.index);
-app.get('/articles/tags/:tagID',articleController.viewTag);
+//app.get('/articles/tags/:tagID',articleController.viewTag);
 app.get('/articles/new',articleController.write);
 app.get('/articles/:articleID',articleController.view);
 app.post('/articles',articleController.create);
