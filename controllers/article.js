@@ -107,22 +107,24 @@ controller.create = [
 			return tag.toLowerCase();
 		}));
 		console.log("req.tags: "+req.tags);
+		console.log("req.tags.length: "+req.tags.length);
 		delete req.body.tags;
 		next();
 	},
 	function(req,res,next) { //create the article and tags in the database, assign tags to article
 		console.log("I made it to the function where I actually create and save things");
 		var article = new Article(req.body);
-		console.log("just created article: "+article);
-		console.log("req.tags:"+req.tags);
-		article.tags = req.tags;
+		// console.log("just created article: "+article);
+		// console.log("req.tags:"+req.tags); //req.tags is still existing here
+		// article.tags = req.tags;
+		// console.log("article.tags: "+article.tags);
 		//loop through req.tags
 		var toCreate = []; //array of functions to create tags, that should be run in the callback function
 		
 		//prep for creating tags
 		console.log("article: "+article);
-		console.log("article.tags.length: "+article.tags.length);
-		for(var i = 0; i< article.tags.length; i++) {
+		console.log("req.tags.length: "+req.tags.length);
+		for(var i = 0; i< req.tags.length; i++) {
 			console.log("I'm in the for loop");
 			toCreate.push(function(callback) { //push functions into toCreate
 																				//each function will create one new tag when it's called
@@ -150,10 +152,15 @@ controller.create = [
 				article.tags.push(tagId);
 				console.log(article.tags);
 			});
+
+			console.log("out of the forEach");
+			
 			article.save(function(err,article) {
+				console.log("in the save function");
 				console.log("article: "+article);
 				console.log("article.tags: "+article.tags);
-				res.redirect('/articles')
+				if (err) throw err;
+				res.redirect('/articles');
 			});
 		});
 		//results will be an array of object ids

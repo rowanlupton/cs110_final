@@ -8,7 +8,10 @@ var ArticleSchema = new Schema({ //articles will have these things
 	tags:[{type:Schema.Types.ObjectId,ref:'tag'}]
 });
 
-ArticleSchema.pre('save',function() {})
+ArticleSchema.pre('save',function(next,done) {
+	
+	next();
+})
 
 mongoose.model('article',ArticleSchema); //exports the Schema for use, as mongoose.model('article')
 
