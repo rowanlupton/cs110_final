@@ -6,7 +6,7 @@
 		<% if (article.tags != '') {
 			for (var i=0;i<article.tags.length;i++) { %>
 			<% console.log(i) %>
-			<a href="/articles/tags/<%=article.tags[i]%>" class="tag"><%=article.tags[i].name%></a>
+			<a href="/articles/tags/<%=article.tags[i].id%>" class="tag"><%=article.tags[i].name%></a>
 		<% }
 		}; %>
 	</div>

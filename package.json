@@ -12,7 +12,8 @@
     "to-markdown": "*",
     "bootstrap-markdown": "*",
     "lodash": "^2.4.1",
-    "async": "^0.7.0"
+    "async": "^0.7.0",
+    "mongoose-findorcreate":"*"
   },
   "author": "rowan",
   "license": "ISC"

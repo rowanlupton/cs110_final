@@ -13,7 +13,8 @@ things with a function(err) {} are running a function; if there is an error, it 
 
 //this is necessary to make it work
 controller.load = function(req,res,next,id) {
-	Article.findById(id).exec(function(err,article) {
+	Article.findById(id).populate('tags').exec(function(err,article) {
+		//populate('tags') lets you access tags by index value, instead of just throwing the id
 		if(err) throw err;
 		if(!article) return res.send(404);
 		req.article = article;
@@ -101,68 +102,45 @@ controller.create = [
 		}
 	},
 	function(req,res,next) {
-		console.log("I made it to the splitting tags function");
 		req.tags = _.uniq(req.body.tags.split(',').map(function(tag) {
-			console.log("tag: "+tag);
 			return tag.toLowerCase();
 		}));
-		console.log("req.tags: ",req.tags);
-		console.log("req.tags.length: "+req.tags.length);
 		delete req.body.tags;
 		next();
 	},
 	function(req,res,next) { //create the article and tags in the database, assign tags to article
 		console.log("I made it to the function where I actually create and save things");
 		var article = new Article(req.body);
-		// console.log("just created article: "+article);
-		// console.log("req.tags:"+req.tags); //req.tags is still existing here
-		// article.tags = req.tags;
-		// console.log("article.tags: "+article.tags);
-		//loop through req.tags
 		var toCreate = []; //array of functions to create tags, that should be run in the callback function
 		
 		//prep for creating tags
-		// console.log("article: "+article);
-		// console.log("req.tags.length: "+req.tags.length);
-		// console.log("req.tags: "+req.tags);
 		req.tags.forEach(function(tagName) {
-			// console.log("I'm in the for loop");
-			// console.log("req.tags[i]: "+req.tags[i]);
 			toCreate.push(function(callback) { //push functions into toCreate
 																				//each function will create one new tag when it's called
-				// console.log("inside toCreate.push");
-				//called Tag.create. passes it the current tag as name, makes a callback with
-				//an error and the current tag
-				Tag.create({ name:tagName },function(err,tag) {
-					//err etc
-					// console.log("inside Tag.create");
-					if(err) return callback(err);
-					//calls async's function callback, passing no error and the tag id
-					// console.log("tag.id: "+tag.id);
-					// console.log("tag.name: "+tag.name);
-					console.log(tag);
-					callback(null,tag.id);
-				});
+				if (1===0) { //if a tag with the name already exists
+
+				} else { //if a tag with the name doesn't already exists
+					Tag.create({ name:tagName },function(err,tag) {
+						//err etc
+						if(err) return callback(err);
+						//calls async's function callback, passing no error and the tag id
+						console.log(tag);
+						callback(null,tag.id);
+					});
+				}
 			});
 		});
 
 		//runs all functions in toCreate, and when it finishes, runs the callback
 		async.parallel(toCreate,function(err,tagIds) {
-			// console.log("I did the async thing");
 			if(err) return err;
-			// console.log("tagIds: "+tagIds);
 			tagIds.forEach(function(tagId) {
-				// console.log("in the tagIds forEach");
 				article.tags.push(tagId);
-				//console.log(article.tags);
 			});
 
 			console.log("out of the forEach");
 			
 			article.save(function(err,article) {
-				// console.log("in the save function");
-				// console.log("article: "+article);
-				// console.log("article.tags: "+article.tags);
 				if (err) throw err;
 				res.redirect('/articles');
 			});
