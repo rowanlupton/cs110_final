@@ -106,7 +106,7 @@ controller.create = [
 			console.log("tag: "+tag);
 			return tag.toLowerCase();
 		}));
-		console.log("req.tags: "+req.tags);
+		console.log("req.tags: ",req.tags);
 		console.log("req.tags.length: "+req.tags.length);
 		delete req.body.tags;
 		next();
@@ -122,43 +122,47 @@ controller.create = [
 		var toCreate = []; //array of functions to create tags, that should be run in the callback function
 		
 		//prep for creating tags
-		console.log("article: "+article);
-		console.log("req.tags.length: "+req.tags.length);
-		for(var i = 0; i< req.tags.length; i++) {
-			console.log("I'm in the for loop");
+		// console.log("article: "+article);
+		// console.log("req.tags.length: "+req.tags.length);
+		// console.log("req.tags: "+req.tags);
+		req.tags.forEach(function(tagName) {
+			// console.log("I'm in the for loop");
+			// console.log("req.tags[i]: "+req.tags[i]);
 			toCreate.push(function(callback) { //push functions into toCreate
 																				//each function will create one new tag when it's called
-				console.log("inside toCreate.push");
+				// console.log("inside toCreate.push");
 				//called Tag.create. passes it the current tag as name, makes a callback with
 				//an error and the current tag
-				Tag.create({name:req.tags[i]},function(err,tag) {
+				Tag.create({ name:tagName },function(err,tag) {
 					//err etc
-					console.log("inside Tag.create");
+					// console.log("inside Tag.create");
 					if(err) return callback(err);
 					//calls async's function callback, passing no error and the tag id
-					console.log("tag.id: "+tag.id);
+					// console.log("tag.id: "+tag.id);
+					// console.log("tag.name: "+tag.name);
+					console.log(tag);
 					callback(null,tag.id);
 				});
 			});
-		}
+		});
 
 		//runs all functions in toCreate, and when it finishes, runs the callback
 		async.parallel(toCreate,function(err,tagIds) {
-			console.log("I did the async thing");
+			// console.log("I did the async thing");
 			if(err) return err;
-			console.log("tagIds: "+tagIds);
+			// console.log("tagIds: "+tagIds);
 			tagIds.forEach(function(tagId) {
-				console.log("in the tagIds forEach");
+				// console.log("in the tagIds forEach");
 				article.tags.push(tagId);
-				console.log(article.tags);
+				//console.log(article.tags);
 			});
 
 			console.log("out of the forEach");
 			
 			article.save(function(err,article) {
-				console.log("in the save function");
-				console.log("article: "+article);
-				console.log("article.tags: "+article.tags);
+				// console.log("in the save function");
+				// console.log("article: "+article);
+				// console.log("article.tags: "+article.tags);
 				if (err) throw err;
 				res.redirect('/articles');
 			});

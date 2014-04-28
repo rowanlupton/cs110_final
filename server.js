@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGOLAB_URI ||  'mongodb://localhost/cs110final');
 
 app.use(express.json());
 app.use(express.urlencoded()); //turns URL data into a usable piece object
-app.use(express.logger()); //logs connection data to node terminal
+// app.use(express.logger()); //logs connection data to node terminal
 app.use(express.methodOverride());
 app.set('view engine','ejs'); //uses ejs instead of jade
 app.use(express.static(__dirname, '/public'));//allows us to use static files from the public directory
