@@ -53,8 +53,13 @@ controller.viewTag = [
 	},
 	function(req,res,next) {
 		res.locals.title = "tag index";
-		Tag.find({id:req.params.tagID},function(err,tag) {
-			Article.find({id:tag.articles},function(err,articles) {
+		Tag.find({_id:req.params.tagID},function(err,tag) {
+			if(err) throw err;
+			console.log("tag: ",tag);
+			console.log("tag.articles: ",tag[0].articles);
+			Article.find({_id:{$in:tag[0].articles}},function(err,articles) {
+				if(err) throw err;
+				console.log("articles",articles);
 				res.render('article/tagIndex',{articles:articles});
 			});
 		});
