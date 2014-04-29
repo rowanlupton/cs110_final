@@ -50,13 +50,12 @@ controller.viewTag = [
 		next();
 	},
 	function(req,res,next) {
-		console.log(req.params.tagID);
-		/*Article.find({tags.id:req.params.tagID},function(err,articles) {
-			if(err) throw err;
-			console.log('articles: ',articles);
-			res.render('article/tagIndex',{articles:articles});
-		});*/
-		res.send("tag index page");
+		res.locals.title = "tag index";
+		Tag.find({id:req.params.tagID},function(err,tag) {
+			Article.find({id:tag.articles},function(err,articles) {
+				res.render('article/tagIndex',{articles:articles});
+			});
+		});
 	}
 ];
 
