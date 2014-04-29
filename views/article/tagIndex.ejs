@@ -1,12 +1,15 @@
 <%include top%>
-	<a href="/articles" id="indexLink">back to index</a>
-	<div id="articleList">
-		<ul>
-			<% articles.forEach(function(article) { %>
-				<li>
-					<a href="/articles/<%=article.id%>"><%=article.title%></a>
-				</li>
-			<% }); %>
-		</ul>
-	</div><!--articleList-->
+	<div class="tagIndex index">
+		<a href="/articles" id="indexLink">back to index</a>
+		<div id="articleList">
+			<h1>Articles</h1>
+			<ul>
+				<% articles.forEach(function(article) { %>
+					<li>
+						<a href="/articles/<%=article.id%>"><%=article.title%></a>
+					</li>
+				<% }); %>
+			</ul>
+		</div><!--articleList-->
+	</div><!--tagIndex index-->
 <%include bottom%>

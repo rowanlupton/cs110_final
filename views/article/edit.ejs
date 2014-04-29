@@ -1,9 +1,11 @@
 <%include top%>
-	<form method="post" action="/articles/<%=article.id%>">
-		<input type="hidden" name="_method" value="put"> <!--html forms don't support put directly; you have to use express' methodoverride to put-->
-		<input type="text" name="title" required class="title input" value="<%=article.title%>" />
-		<textarea name="body" id="editBody" class="body textarea input" rows="15" required><%=article.body%></textarea>
-		<input type="text" name="tags" data-role="tagsinput" placeholder="tags" value="<%=article.tags%>" />
-		<button type="submit" class="submit btn btn-default">update</button>
-	</form>
+	<div class="edit">
+		<form method="post" action="/articles/<%=article.id%>">
+			<input type="hidden" name="_method" value="put"> <!--html forms don't support put directly; you have to use express' methodoverride to put-->
+			<input type="text" name="title" required class="title input" value="<%=article.title%>" />
+			<textarea name="body" id="editBody" class="body textarea input" rows="15" required><%=article.body%></textarea>
+			<input type="text" name="tags" data-role="tagsinput" placeholder="tags" value="<%=article.tags%>" />
+			<button type="submit" class="submit btn btn-default">update</button>
+		</form>
+	</div><!--edit-->
 <%include bottom%>

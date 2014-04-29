@@ -24,6 +24,25 @@ form {
 	padding-left:2em;
 }
 
+h1 {
+	font-size: 1.5em;
+}
+
+
+/*******************
+* index formatting *
+*******************/
+
+.index h1 {
+	color: #77777f;
+}
+
+.index ul {
+	list-style: none;
+	padding-left: 10px;
+}
+
+
 
 /******************
 * form formatting *
@@ -54,6 +73,8 @@ form > .submit {
 * view formatting *
 ******************/
 
+
+
 img.floatRight {
 	float:right;
 }
@@ -79,10 +100,11 @@ id="editButton" {
 .tag {
 	position: relative;
 	border: 1px solid #428bca;
-	padding-left:0.5em;
-	padding-right:0.5em;
-	padding-top:0.1em;
-	padding-bottom:0.1em;
+	font-size: 0.85em;
+	padding-left:0.3em;
+	padding-right:0.3em;
+	padding-top:0.01em;
+	padding-bottom:0.001em;
 	border-radius:4px;
 }
 

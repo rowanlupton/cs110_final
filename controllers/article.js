@@ -36,7 +36,9 @@ controller.index = [
 		res.locals.title = "index";
 		Article.find({},function(err,articles) { //looks for ALL of the things in the articles variable
 			if(err) throw err; //if there was an error, stop (and tell me what the error was)
-			res.render('article/index',{articles:articles}); //render the index ejs file, with article as the key for the articles variable
+			Tag.find({},function(err,tags) {
+				res.render('article/index',{articles:articles, tags:tags}); //render the index ejs file, with article as the key for the articles variable
+			});
 		});
 	}
 ];
