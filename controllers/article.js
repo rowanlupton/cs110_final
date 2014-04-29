@@ -51,12 +51,11 @@ controller.viewTag = [
 	},
 	function(req,res,next) {
 		console.log(req.params.tagID);
-
-		Article.find({tags._id:req.params.tagID},function(err,articles) {
+		/*Article.find({tags.id:req.params.tagID},function(err,articles) {
 			if(err) throw err;
 			console.log('articles: ',articles);
 			res.render('article/tagIndex',{articles:articles});
-		})
+		});*/
 		res.send("tag index page");
 	}
 ];
@@ -110,7 +109,6 @@ controller.create = [
 		next();
 	},
 	function(req,res,next) { //create the article and tags in the database, assign tags to article
-		console.log("I made it to the function where I actually create and save things");
 		var article = new Article(req.body);
 		var toCreate = []; //array of functions to create tags, that should be run in the callback function
 		
@@ -118,17 +116,14 @@ controller.create = [
 		req.tags.forEach(function(tagName) {
 			toCreate.push(function(callback) { //push functions into toCreate
 																				//each function will create one new tag when it's called
-				if (1===0) { //if a tag with the name already exists
-
-				} else { //if a tag with the name doesn't already exists
-					Tag.findOrCreate({ name:tagName },function(err,tag,created) {
-						//err etc
-						if(err) return callback(err);
-						//calls async's function callback, passing no error and the tag id
-						console.log(tag);
-						callback(null,tag.id);
-					});
-				}
+				Tag.findOrCreate({name:tagName},function(err,tag,created) {
+					//err etc
+					tag.articles.push(article._id);
+					tag.save();
+					if(err) return callback(err);
+					//calls async's function callback, passing no error and the tag id
+					callback(null,tag.id);
+				});
 			});
 		});
 
@@ -143,6 +138,7 @@ controller.create = [
 			
 			article.save(function(err,article) {
 				if (err) throw err;
+				// console.log(tag);
 				res.redirect('/articles');
 			});
 		});

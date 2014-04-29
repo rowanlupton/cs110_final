@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema; //lets us use mongoose's Schema functionality
 
+
 var ArticleSchema = new Schema({ //articles will have these things
 	title:String, //title will be a string
 	body:String, //body will be a string
