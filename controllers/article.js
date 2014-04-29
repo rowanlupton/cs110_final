@@ -44,21 +44,22 @@ controller.index = [
 
 //viewTag
 //views a list of articles for a given tag
-/*controller.viewTag = [
+controller.viewTag = [
 	function(req,res,next) {
 		console.log("CALLED viewTag");
 		next();
 	},
 	function(req,res,next) {
-		res.locals.title = "index of tag: "+req.params.tagID;
 		console.log(req.params.tagID);
-		Article.find({'tags':req.params.tagID},function(err,articles) {
+
+		Article.find({tags._id:req.params.tagID},function(err,articles) {
 			if(err) throw err;
-			console.log(articles);
+			console.log('articles: ',articles);
 			res.render('article/tagIndex',{articles:articles});
-		});
+		})
+		res.send("tag index page");
 	}
-];*/
+];
 
 
 //view
@@ -120,7 +121,7 @@ controller.create = [
 				if (1===0) { //if a tag with the name already exists
 
 				} else { //if a tag with the name doesn't already exists
-					Tag.create({ name:tagName },function(err,tag) {
+					Tag.findOrCreate({ name:tagName },function(err,tag,created) {
 						//err etc
 						if(err) return callback(err);
 						//calls async's function callback, passing no error and the tag id
