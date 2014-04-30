@@ -55,11 +55,8 @@ controller.viewTag = [
 		res.locals.title = "tag index";
 		Tag.find({_id:req.params.tagID},function(err,tag) {
 			if(err) throw err;
-			console.log("tag: ",tag);
-			console.log("tag.articles: ",tag[0].articles);
 			Article.find({_id:{$in:tag[0].articles}},function(err,articles) {
 				if(err) throw err;
-				console.log("articles",articles);
 				res.render('article/tagIndex',{articles:articles});
 			});
 		});
@@ -181,6 +178,12 @@ controller.update = [
 		next();
 	},
 	function(req,res,next) {
+		req.article.tags=[];
+		req.article.save();
+		console.log("req.article.tags: ",req.article.tags);
+		next();
+	},
+	function(req,res,next) {
 		console.log("splitting tags");
 		req.body.tags = req.body.tags.split(",");
 		console.log("tags are split (I think)");
@@ -191,6 +194,7 @@ controller.update = [
 			req.article[key] = req.body[key]; //assign body[that key] to the respective place in article
 		}
 		req.article.save(function(err,article) { //save a new thing as the req.article
+			if(err) throw err;
 			res.redirect("/articles/"+article.id); //respond with the updated article as a json
 		});
 	}
